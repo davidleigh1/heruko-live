@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/tlvwhzhv/repos/games
+#   - /bin/cp index.html $DEPLOYPATH
+#   - /bin/cp style.css $DEPLOYPATH
+    - /bin/cp -R chat $DEPLOYPATH
+    # - /bin/cp -R connect $DEPLOYPATH
+    # - /bin/cp -R public $DEPLOYPATH
+    # - /bin/cp -R react $DEPLOYPATH
