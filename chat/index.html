@@ -1,66 +1,16 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Websocket Real-time Chat | {tlv.works}</title>
-        <style>
-            body {
-                margin: 0;
-                padding-bottom: 3rem;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            #form {
-                background: rgba(0, 0, 0, 0.15);
-                padding: 0.25rem;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                display: flex;
-                height: 3rem;
-                box-sizing: border-box;
-                backdrop-filter: blur(10px);
-            }
-            #input {
-                border: none;
-                padding: 0 1rem;
-                flex-grow: 1;
-                border-radius: 2rem;
-                margin: 0.25rem;
-            }
-            #input:focus {
-                outline: none;
-            }
-            #form > button {
-                background: #333;
-                border: none;
-                padding: 0 1rem;
-                margin: 0.25rem;
-                border-radius: 3px;
-                outline: none;
-                color: #fff;
-            }
+    <title>Websocket Real-time Chat | {tlv.works}</title>
 
-            #messages {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-            }
-            #messages > li {
-                /* padding: 0.5rem 1rem; */
-            }
-            #messages > li:nth-child(odd) {
-                background: #efefef;
-            }
-            #messages > li.info {
-                /* background: #d3e9cc; */
-                color: green;
-                padding: 0.1rem 1rem;
-            }
-            #messages > li.chat {
-                padding: 0.5rem 1rem;
-            }
-        </style>
+    <link rel="stylesheet" href="./chat/css/bootstrap.css">
+    <link rel="stylesheet" href="./chat/css/toastr.min.css">
+    <link rel="stylesheet" href="./chat/css/chat-style.css">
+
     </head>
     <body>
         <ul id="messages"></ul>
@@ -68,46 +18,60 @@
             <input id="input" autocomplete="off" /><button>Send</button>
         </form>
 
+
+
+        <!-- <div id="alert" class="alert alert-dismissible fade" role="alert">
+            <div id="alert-content">Welcome to the chat!</div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div id="alertAnchor"></div> -->
+
+
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+            <!-- Position it -->
+            <div style="position: absolute; top: 0; right: 0;">
+          
+              <!-- Then put toasts within -->
+              <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <img src="..." class="rounded mr-2" alt="...">
+                  <strong class="mr-auto">Bootstrap</strong>
+                  <small class="text-muted">just now</small>
+                  <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="toast-body">
+                  See? Just like this.
+                </div>
+              </div>
+          
+              <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <img src="..." class="rounded mr-2" alt="...">
+                  <strong class="mr-auto">Bootstrap</strong>
+                  <small class="text-muted">2 seconds ago</small>
+                  <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="toast-body">
+                  Heads up, toasts will stack automatically
+                </div>
+              </div>
+            </div>
+          </div>
+
+
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            window.chat = {};
-            var socket = io();
-
-            var messages = document.getElementById('messages');
-            var form = document.getElementById("form");
-            var input = document.getElementById("input");
-
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                if (input.value) {
-                    socket.emit("chat_message", input.value);
-                    input.value = "";
-                }
-            });
-
-            socket.on('chat_message', function(msg) {
-                var item = document.createElement('li');
-                item.textContent = msg;
-                item.classList.add("chat");
-                messages.appendChild(item);
-                window.scrollTo(0, document.body.scrollHeight);
-            });
-
-            socket.on('info_message', function(msg) {
-                var item = document.createElement('li');
-                item.textContent = msg;
-                item.classList.add("info");
-                messages.appendChild(item);
-                window.scrollTo(0, document.body.scrollHeight);
-            });
-
-            document.addEventListener("DOMContentLoaded", function (event) {
-                window.chat.name = prompt('What is your name?');
-                socket.emit("chat_message", window.chat.name + " has joined!");
-            });
-
-
-        </script>
+        <!-- <script src="./chat/js/jquery-3.4.1.slim.min.js"></script> -->
+        <script src="./chat/js/jquery-3.6.0.min.js"></script>
+        <script src="./chat/js/bootstrap.min.js"></script>
+        <script src="./chat/js/toastr.min.js"></script>
+        <script src="./chat/js/chat-scripts.js"></script>
 
     </body>
 </html>

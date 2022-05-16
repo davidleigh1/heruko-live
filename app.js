@@ -51,6 +51,8 @@ io.on('connection', (socket) => {
 var routes = require('./routes');
 app.use('/', routes);
 
+app.use(express.static('public'));
+
 server.listen(3001, () => {
     console.log('Server ready - listening on *:3001');
 });
@@ -99,3 +101,8 @@ function lastUpdatedDate (file) {
 // } else {
 //     console.log("Buses is not defined!", typeof buses);
 // }
+
+
+/* Source: https://getbootstrap.com/docs/5.2/getting-started/download/#npm */
+// const bootstrap = require('bootstrap');
+
