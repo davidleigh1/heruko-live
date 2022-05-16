@@ -1,5 +1,7 @@
 // car.js
 
+// TEST
+
 console.log("This is vars.js!");
 
 const cars = {

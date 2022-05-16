@@ -14,7 +14,7 @@ const io = new Server(server);
 
 
 /*
-[ ] Host + Github deployment
+[X] Host + Github deployment
 [ ] Staging + Production hosting
 [ ] Bootstrap
 [ ] Toast notifications
