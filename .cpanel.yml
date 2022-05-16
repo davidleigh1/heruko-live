@@ -2,9 +2,13 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/tlvwhzhv/public_html/live/games
-    - /bin/cp app.js $DEPLOYPATH
-# - /bin/cp style.css $DEPLOYPATH
-- /bin/cp -R chat $DEPLOYPATH
-# - /bin/cp -R connect $DEPLOYPATH
-# - /bin/cp -R public $DEPLOYPATH
-# - /bin/cp -R react $DEPLOYPATH
+    # - /bin/cp app.js $DEPLOYPATH
+    # - /bin/cp style.css $DEPLOYPATH
+    # - /bin/cp -R chat $DEPLOYPATH
+    # - /bin/cp -R connect $DEPLOYPATH
+    # - /bin/cp -R public $DEPLOYPATH
+    # - /bin/cp -R react $DEPLOYPATH
+    - /bin/rsync -chat $DEPLOYPATH
+    -- exclude='.git/'
+    -- exclude='.gitignore'
+    -- exclude='admin/config.php'
