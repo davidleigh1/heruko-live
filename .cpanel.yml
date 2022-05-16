@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/tlvwhzhv/repos/games
-#   - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp app.js $DEPLOYPATH
 #   - /bin/cp style.css $DEPLOYPATH
     - /bin/cp -R chat $DEPLOYPATH
     # - /bin/cp -R connect $DEPLOYPATH
