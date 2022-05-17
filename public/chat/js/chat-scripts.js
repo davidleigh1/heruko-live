@@ -1,4 +1,4 @@
-window.chat = {};
+window.chat = localStorage.getItem("chat") ? JSON.parse( localStorage.getItem("chat") ) : {};
 var socket = io();
 
 var messages = document.getElementById('messages');
@@ -11,6 +11,18 @@ form.addEventListener("submit", function (e) {
         socket.emit("chat_message", input.value);
         input.value = "";
     }
+});
+
+
+
+socket.on("notify", function(eventObj) {
+    console.log("event", eventObj);
+    // event {"type":"notify","level":"info","dest":"all","content":"User connected"}
+
+    if (eventObj.type == "notify"){
+        notify(eventObj.content, eventObj.level);
+    }
+
 });
 
 socket.on('chat_message', function(msg) {
@@ -30,13 +42,22 @@ socket.on('info_message', function(msg) {
 });
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    window.chat.name = prompt('What is your name?');
-    socket.emit("chat_message", window.chat.name + " has joined!");
+
+    /* Let's check if we know this user */
+    if ( !getStoredSettings("this_username") ){
+        chat.this_username = prompt('What is your name?');
+        updateStoredSettings();
+    } else {
+        notify("Welcome back <strong>"+chat.this_username+"</strong>!","success");
+        console.log("'window.chat' settings found:",window.chat)
+    }
+    socket.emit("chat_message", window.chat.this_username + " has joined! ("+socket.id+")");
 });
 
 /* Toast Notifications */
 
 function notify(message = "default_message", messageType = "info") {
+    // console.log("notify()", message, messageType);
     
     toastr.options = {
         "closeButton": true,
@@ -48,7 +69,7 @@ function notify(message = "default_message", messageType = "info") {
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
-        "timeOut": "4000",
+        "timeOut": "16000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
@@ -99,3 +120,34 @@ function showalert(message,alerttype) {
     }, 10000);
 }
 
+/* Storage */
+
+function updateStoredSettings(settingKey, settingValue, storageKey = "chat") {
+    let chatObject = localStorage.getItem(storageKey) ? JSON.parse( localStorage.getItem(storageKey) ) : {};
+
+    if ( !!settingKey && !!settingValue ){
+        // If we get a single key to save...
+        chatObject[settingKey] = settingValue; 
+        localStorage.setItem(storageKey,JSON.stringify(chatObject));
+    } else {
+        // Otherwise we assume it's already been updated and just save the whole object
+        localStorage.setItem(storageKey,JSON.stringify(window.chat));
+    }
+
+    return getStoredSettings(null, storageKey);
+}
+
+function getStoredSettings(settingKey, storageKey = "chat") {
+    if (!localStorage.getItem(storageKey)){
+        return false;
+    }
+
+    let chatObject = JSON.parse(localStorage.getItem(storageKey));
+    if (!!settingKey){
+        return chatObject[settingKey];
+    } else {
+        return chatObject;
+    }
+}
+
+// console.log(socket.id);

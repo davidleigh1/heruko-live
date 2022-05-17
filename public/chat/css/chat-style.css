@@ -59,8 +59,7 @@ body {
 
 /* NOTIFICATONS */
 
-.alert {
-    position: absolute;
+.toast-bottom-right {
     bottom: 5%;
     right: 1%;
 }
