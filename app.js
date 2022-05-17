@@ -31,45 +31,70 @@ const io = new Server(server);
 [ ] History and reload on refresh
 */ 
 
+/* src: https://www.npmjs.com/package/uuid  */
+const { v4: uuidv4 } = require('uuid');
+
+// uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+
 const users = {};
 
-function logConnection(user_id) {
-
-    /* Confirm if we recognize this user */
-
-    if (!users[user_id]){
-        console.log("User not found!",user_id);
-        logNewUser(user_id);
-    } else {
-        console.log("User found!",user_id);
-        users[user_id].last_connected_at = new Date();
-    }
-}
-
-function logNewUser(user_id){
+function logNewUser(userObj){
+    console.log("LOGGING NEW USER!");
     const user = {};
-    user.id = user_id;
-    user.socket_id = user_id;
-    user.first_connected_at = new Date();
-    users[user_id] = user;
+    user.user_id = userObj.user_id;
+    user.user_name = userObj.user_name;
+    user.socket_id = userObj.socket_id;
+    user.first_connected_at = new Date().toISOString();
+    user.last_connected_at = new Date().toISOString();
+    users[user.user_id] = user;
+    return users[user.user_id];
 }
 
 io.on('connection', (socket) => {
-    const connection_msg = "User '" + socket.id + "' connected at " + socket.handshake.issued;
+    const connection_msg = "Connection detected on socket: '" + socket.id + "' at " + new Date(socket.handshake.issued);
     console.log(connection_msg, socket.id);
-    logConnection(socket.id);
+    // logConnection(socket.id);
     io.emit('info_message', connection_msg);
     io.emit("notify", {'type':'notify', 'level': 'info', 'dest':'all', 'content': connection_msg, 'happened_at': socket.handshake.issued, 'query': socket.handshake.query} );
-    console.log("Users",users);
+    
+    console.log("Current users",users,"Total users:",Object.keys(users).length, "\n\n");
+
     socket.on('disconnect', () => {
         const disconnection_msg = 'User disconnected';
-        console.log(disconnection_msg);
+        console.log(disconnection_msg, "on socket: '"+ socket.id + "'. Total users:",Object.keys(users).length,"");
         io.emit('info_message', disconnection_msg);
         io.emit("notify", {'type':'notify', level: 'warning', 'dest':'all', 'content': disconnection_msg} );
     });
-    socket.on('chat_message', (msg) => {
-        console.log('Message: ' + msg);
-        io.emit('chat_message', msg);
+
+    socket.on('client_connection', (settingsObj) => {
+        console.log('\n\n==> client_connection:\n', settingsObj);
+
+        // logConnection(settingsObj);
+
+        /* Confirm if we recognize this user */
+        if ( !users[settingsObj.user_id] ){
+            console.log("User not found!",settingsObj.user_id);
+            const newUser = logNewUser(settingsObj);
+            io.emit("chat_message", newUser.user_name + " has joined! ("+newUser.socket_id+")", "System" );
+
+        } else {
+            console.log("User found!",settingsObj.user_id);
+            // users[settingsObj.user_id].last_connected_at = new Date();
+
+        // if ( !users[settingsObj.socket_id] ){
+        //     console.error("USER NOT FOUND!", settingsObj);
+        // } else {
+            users[settingsObj.user_id].user_name = settingsObj.user_name;
+            users[settingsObj.user_id].socket_id = settingsObj.socket_id;
+            users[settingsObj.user_id].last_connected_at = settingsObj.last_connected_at;
+        }
+        console.log("\n-------------\nUsers",users,"Total users:",Object.keys(users).length,"\n-------------\n");
+
+    });
+
+    socket.on('chat_message', (msg, origin_user_id) => {
+        console.log('Message: ' + msg, origin_user_id);
+        io.emit('chat_message', msg, users[origin_user_id].user_name);
     });
 });
 
