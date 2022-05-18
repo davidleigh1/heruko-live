@@ -23,6 +23,7 @@ form.addEventListener("submit", function (e) {
         msg_obj.is_history = false;
 
         console.log(">>>","chat_message", msg_obj);
+
         socket.emit("chat_message", msg_obj );
         // console.log(">>>","chat_message", input.value, getStoredSettings("user_id"));
         // socket.emit("chat_message", input.value, getStoredSettings("user_id") );
@@ -90,9 +91,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         updateStoredSettings();
     } else {
         notify("Welcome back <strong>"+chat.user_name+"</strong>!","success");
-        console.log("'window.chat' settings found:",window.chat)
+        // console.log("'window.chat' settings found:",window.chat)
     }
     // socket.emit("chat_message", window.chat.user_name + " has joined! ("+window.chat.socket_id+")", getStoredSettings("user_id") );
+
+    document.getElementById("username").innerHTML = "#" + getStoredSettings("user_name");
+
 });
 
 /* Toast Notifications */
