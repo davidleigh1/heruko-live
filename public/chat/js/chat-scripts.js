@@ -9,8 +9,23 @@ var input = document.getElementById("input");
 form.addEventListener("submit", function (e) {
     e.preventDefault();
     if (input.value) {
-        console.log(">>>","chat_message", input.value, getStoredSettings("user_id"));
-        socket.emit("chat_message", input.value, getStoredSettings("user_id") );
+
+        /* Prepare chat_message object to send... */
+
+        const msg_obj = {};
+        msg_obj.msg_id = getUUID();
+        msg_obj.sender_id = getStoredSettings("user_id");
+        msg_obj.sender_name = getStoredSettings("user_name");
+        msg_obj.dest_id = null;
+        msg_obj.msg_type = 'chat_message';
+        msg_obj.content = input.value;
+        msg_obj.happened_at = new Date().toISOString();
+        msg_obj.is_history = false;
+
+        console.log(">>>","chat_message", msg_obj);
+        socket.emit("chat_message", msg_obj );
+        // console.log(">>>","chat_message", input.value, getStoredSettings("user_id"));
+        // socket.emit("chat_message", input.value, getStoredSettings("user_id") );
         input.value = "";
     }
 });
