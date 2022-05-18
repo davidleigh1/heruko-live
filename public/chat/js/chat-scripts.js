@@ -58,9 +58,17 @@ socket.on("notify", function(eventObj) {
 
 });
 
-socket.on('chat_message', function(msg, origin_user_name) {
+// socket.on('chat_message', function(msg, origin_user_name) {
+//     var item = document.createElement('li');
+//     item.textContent = (origin_user_name + ": "+ msg);
+//     item.classList.add("chat");
+//     messages.appendChild(item);
+//     window.scrollTo(0, document.body.scrollHeight);
+// });
+
+socket.on('chat_message', function(msg_obj) {
     var item = document.createElement('li');
-    item.textContent = (origin_user_name + ": "+ msg);
+    item.textContent = ("<span id='"+msg_obj.msg_id+"' title='"+ JSON.stringify(msg_obj) +"'><strong>" + msg_obj.sender_name + "</strong>: " + msg_obj.content + "</span>");
     item.classList.add("chat");
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);

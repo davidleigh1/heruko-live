@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
         // } else {
             users[settingsObj.user_id].user_name = settingsObj.user_name;
             users[settingsObj.user_id].socket_id = settingsObj.socket_id;
-            users[settingsObj.user_id].last_connected_at = settingsObj.last_connected_at;
+            users[settingsObj.user_id].last_connected_at = new Date().toISOString();
         }
         console.log("\n-------------\nUsers",users,"Total users:",Object.keys(users).length,"\n-------------\n");
 
