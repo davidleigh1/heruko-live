@@ -68,7 +68,7 @@ socket.on("notify", function(eventObj) {
 
 socket.on('chat_message', function(msg_obj) {
     var item = document.createElement('li');
-    item.textContent = ("<span id='"+msg_obj.msg_id+"' title='"+ JSON.stringify(msg_obj) +"'><strong>" + msg_obj.sender_name + "</strong>: " + msg_obj.content + "</span>");
+    item.innerHTML = ("<span id='"+msg_obj.msg_id+"' class='message-line' title='"+ JSON.stringify(msg_obj) +"'><span class='message-sender'>" + msg_obj.sender_name + "</span><span class='message-content'>" + msg_obj.content + "</span></span><span class='message-timestamp'>"+msg_obj.happened_at+"</span>");
     item.classList.add("chat");
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);

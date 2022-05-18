@@ -104,8 +104,9 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('chat_message', (msg, msg_obj) => {
-        console.log("New Incoming Message from '"+msg_obj.sender_name+"': " + msg_obj.content);
+    socket.on('chat_message', (msg_obj) => {
+        console.log("New Incoming Message:", msg_obj);
+        // console.log("New Incoming Message from '"+msg_obj.sender_name+"': " + msg_obj.content);
         io.emit('chat_message', msg_obj);
     });
 });
@@ -175,13 +176,9 @@ function lastUpdatedDate (file) {
 
 function getUUID() {
 
-    if (!!crypto.randomUUID) {
-        /* Not supported in all browers */
-        return crypto.randomUUID();
-    } else {
-        /* Fallback... */
-        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        );
-    }
+    return uuidv4();
+    /* Fallback... */
+    // return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        // (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    // );
 }

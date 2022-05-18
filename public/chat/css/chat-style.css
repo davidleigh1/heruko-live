@@ -56,6 +56,27 @@ body {
     padding: 0.5rem 1rem;
 }
 
+.message-sender {
+    font-weight: bold;
+    display: block;
+}
+
+.message-content {
+    font-style: italic;
+}
+
+.message-timestamp {
+    font-size: x-small;
+    font-variant: small-caps;
+    display: block;
+    text-align: right;
+}
+
+.controls {
+    display: flex;
+    height: 2rem;
+    background-color: aqua;
+}
 
 /* NOTIFICATONS */
 
