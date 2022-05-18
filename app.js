@@ -20,14 +20,14 @@ const io = new Server(server);
 [X] Toast notifications
 [ ] Icons 
 [X] Broadcast a message to connected users when someone connects or disconnects.
-[ ] Create a centralized list of IDs/sockets so when connecting/disconnecting we keep the same name
+[X] Create a centralized list of IDs/sockets so when connecting/disconnecting we keep the same name
 [ ] https://riptutorial.com/socket-io/example/30273/example-server-side-code-for-handling-users
 [ ] Broadcast a message to connected users with the name of the user connecting or disconnecting (perhaps color icon in list)
 [ ] Add support for nicknames.
 [ ] Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she presses enter.
 [ ] Add “{user} is typing” functionality.
 [ ] Show who’s online.  List with status icons?
-[ ] Add private messaging.
+[ ] Add private messaging - user specific messaging.
 [ ] History and reload on refresh
 */ 
 
@@ -51,18 +51,28 @@ function logNewUser(userObj){
 }
 
 io.on('connection', (socket) => {
-    const connection_msg = "Connection detected on socket: '" + socket.id + "' at " + new Date(socket.handshake.issued);
-    console.log(connection_msg, socket.id);
+    const connection_msg = "Connection detected on socket: " + socket.id;
+    console.log(connection_msg);
+    console.log("Checking for matching users on that socket...");
+
     // logConnection(socket.id);
-    io.emit('info_message', connection_msg);
+    // io.emit('info_message', connection_msg);
     io.emit("notify", {'type':'notify', 'level': 'info', 'dest':'all', 'content': connection_msg, 'happened_at': socket.handshake.issued, 'query': socket.handshake.query} );
     
     console.log("Current users",users,"Total users:",Object.keys(users).length, "\n\n");
 
     socket.on('disconnect', () => {
-        const disconnection_msg = 'User disconnected';
+
+        // TODO: What if returns 0 or >1 ?
+        const disconnectedUserObj = findUsers("socket_id", socket.id)[0];
+
+        const disconnection_msg = "User '"+disconnectedUserObj.user_name+"' disconnected";
+
+        // TODO: Remove from users list on disconnection or on leave?
         console.log(disconnection_msg, "on socket: '"+ socket.id + "'. Total users:",Object.keys(users).length,"");
-        io.emit('info_message', disconnection_msg);
+        
+
+        // io.emit('info_message', disconnection_msg);
         io.emit("notify", {'type':'notify', level: 'warning', 'dest':'all', 'content': disconnection_msg} );
     });
 
@@ -99,6 +109,12 @@ io.on('connection', (socket) => {
             users[settingsObj.user_id].user_name = settingsObj.user_name;
             users[settingsObj.user_id].socket_id = settingsObj.socket_id;
             users[settingsObj.user_id].last_connected_at = new Date().toISOString();
+
+            const reconnection_msg = "User '"+ users[settingsObj.user_id].user_name +"' is back! ("+users[settingsObj.user_id].socket_id+")";
+            io.emit("notify", {'type':'notify', level: 'success', 'dest':'all', 'content': reconnection_msg} );
+
+
+
         }
         console.log("\n-------------\nUsers",users,"Total users:",Object.keys(users).length,"\n-------------\n");
 
@@ -181,4 +197,30 @@ function getUUID() {
     // return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
         // (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     // );
+}
+
+function findUsers(matchKey, matchValue) {
+    matchingUsers = [];
+    // matchKey = "socket_id";
+    // matchValue = "o1vmmbCbbxEK1q-7AAAS";
+
+    for (let userKey in users) {
+    // console.log(`users.${prop} = ${users[prop]}`);
+    
+    for (let [key, value] of Object.entries(users[userKey])) {
+        // console.log(userKey, "---->", key, ":" , value);
+        
+        if (key == matchKey){
+                console.log(userKey, "---->", key, ":" , value);
+                if (key == matchKey && value == matchValue){
+                    console.log("Match!");
+                    matchingUsers.push(users[userKey]);
+                }
+            }
+        }
+        
+        // console.log(users[prop]);
+    }
+    console.log("Found " + matchingUsers.length + " users:", matchingUsers);
+    return matchingUsers;
 }

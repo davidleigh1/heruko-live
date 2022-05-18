@@ -14,12 +14,18 @@
     </head>
     <body>
         <ul id="messages"></ul>
+        <div class="controls">
+            <div id="username" class="username">
+                username
+            </div>
+            <div id="usercount" class="usercount">
+                # users
+            </div>
+            Controls here...
+        </div>
         <form id="form" action="">
             <input id="input" autocomplete="off" /><button>Send</button>
         </form>
-
-        <div class="controls">Controls here...</div>
-
         <script src="/socket.io/socket.io.js"></script>
         <script src="./chat/js/jquery-3.6.0.min.js"></script>
         <script src="./chat/js/bootstrap.min.js"></script>

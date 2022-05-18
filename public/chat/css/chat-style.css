@@ -53,7 +53,8 @@ body {
     padding: 0.1rem 1rem;
 }
 #messages > li.chat {
-    padding: 0.5rem 1rem;
+    /* padding: 0.5rem 1rem; */
+    padding: 0.3rem 0.8rem;
 }
 
 .message-sender {
@@ -73,9 +74,25 @@ body {
 }
 
 .controls {
-    display: flex;
     height: 2rem;
     background-color: aqua;
+    bottom: 0;
+    padding: 0.25rem;
+    /* padding: 0.5rem; */
+    position: fixed;
+    bottom: 3rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    /* height: 3rem; */
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+.username {
+    font-family: monospace;
+    width: 33%;
+    padding: 0 0.5em;
 }
 
 /* NOTIFICATONS */
