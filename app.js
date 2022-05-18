@@ -75,7 +75,19 @@ io.on('connection', (socket) => {
         if ( !users[settingsObj.user_id] ){
             console.log("User not found!",settingsObj.user_id);
             const newUser = logNewUser(settingsObj);
-            io.emit("chat_message", newUser.user_name + " has joined! ("+newUser.socket_id+")", "System" );
+
+            /* Prepare chat_message */
+            const msg_obj = {};
+            msg_obj.msg_id = getUUID();
+            msg_obj.sender_id = 'system';
+            msg_obj.sender_name = 'System';
+            msg_obj.dest_id = null;
+            msg_obj.msg_type = 'chat_message';
+            msg_obj.content = newUser.user_name + " has joined! ("+newUser.socket_id+")";
+            msg_obj.happened_at = new Date().toISOString();
+            msg_obj.is_history = false;
+
+            io.emit("chat_message", msg_obj);
 
         } else {
             console.log("User found!",settingsObj.user_id);
@@ -92,9 +104,9 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('chat_message', (msg, origin_user_id) => {
-        console.log('Message: ' + msg, origin_user_id);
-        io.emit('chat_message', msg, users[origin_user_id].user_name);
+    socket.on('chat_message', (msg, msg_obj) => {
+        console.log("New Incoming Message from '"+msg_obj.sender_name+"': " + msg_obj.content);
+        io.emit('chat_message', msg_obj);
     });
 });
 
@@ -159,3 +171,17 @@ function lastUpdatedDate (file) {
 /* Source: https://getbootstrap.com/docs/5.2/getting-started/download/#npm */
 // const bootstrap = require('bootstrap');
 
+/* Helper Functions */
+
+function getUUID() {
+
+    if (!!crypto.randomUUID) {
+        /* Not supported in all browers */
+        return crypto.randomUUID();
+    } else {
+        /* Fallback... */
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+}
