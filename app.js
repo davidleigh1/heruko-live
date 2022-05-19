@@ -31,7 +31,7 @@ const io = new Server(server, {
   path: custompath
 });
 
-io.set('origins', '*:*');
+// server.set('origins', '*:*');
 
 console.log("SOCKET.IO custom path: ", custompath);
 
@@ -181,7 +181,7 @@ app.use(express.static('public'));
 //     console.log('Server ready - listening on *:3001');
 // });
 
-const myPort = process.env.PORT || 3001;
+const myPort = process.env.PORT || 3000;
 server.listen(myPort, function (){
   console.log("Calling app.listen's callback function...");
   const host = server.address().address;
