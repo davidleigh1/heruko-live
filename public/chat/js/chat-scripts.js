@@ -4,9 +4,12 @@ window.chat.user_id = window.chat.user_id || getUUID();
 /* Source: https://stackoverflow.com/questions/25896225/how-do-i-get-socket-io-running-for-a-subdirectory */
 // var socket = io();
 // const socket = io("https://tlv.works/live");
-var socket = io.connect('https://tlv.works', {
-    path: "/live/socket.io/"
+var socket = io.connect({
+    /* path: "/live/socket.io/" */
 });
+// var socket = io.connect('https://tlv.works', {
+//     path: "/live/socket.io/"
+// });
 
 var messages = document.getElementById('messages');
 var form = document.getElementById("form");

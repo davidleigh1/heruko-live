@@ -1,79 +1,77 @@
 //  nodemon app.js
 
-console.log("==> Loading Games > app.js");
+console.log("-------------------------------")
+console.log(" S T A R T I N G   N O D E J S ");
+console.log(" > $ nodemon app.js");
+console.log("-------------------------------")
 
 /* SET UP SERVER - Source: https://socket.io/get-started/chat */
 
 const express = require('express');
 const app = express();
 const http = require('http');
-const server = http.createServer(app);
-
+const httpServer = http.createServer(app);
 const { Server } = require("socket.io");
-// const io = new Server(server);
 
-/* Source: https://socket.io/docs/v3/troubleshooting-connection-issues/ */
-// const socket = require("socket.io-client")("https://example.com");
+const custompath = "/live/socket.io/";
+const io = new Server(httpServer, {
+    /* path: custompath */
+});
 
-// socket.on("connect_error", (err) => {
-//   console.log(`connect_error due to ${err.message}`);
+console.log("> socket.io ready at: ", io.opts);
+
+// app.get('/', (req, res) => {
+//   res.send('<h1>Hello world</h1>');
 // });
 
-
-/* Source: https://socket.io/docs/v4/server-options/ */
-/* Source: https://stackoverflow.com/questions/25896225/how-do-i-get-socket-io-running-for-a-subdirectory */
-// import { createServer } from "http";
-// import { Server } from "socket.io";
-
-// const server = createServer();
-const custompath = "https://tlv.works/live/chat/socket.io/";
-const io = new Server(server, {
-  path: custompath
+const myPort = process.env.PORT || 3001;
+httpServer.listen(myPort, function (){
+    const selectedHost = httpServer.address().address;
+    const selectedPort = httpServer.address().port;
+    console.log('> httpServer ready - listening at Host: [', selectedHost,'] on Port:[', selectedPort,']');
 });
 
 // server.set('origins', '*:*');
+// io.set('origins', '*:*');
 
-console.log("SOCKET.IO custom path: ", custompath);
-
-
-/*
-[X] Host + Github deployment
-[ ] Staging + Production hosting
-[-] Bootstrap
-[X] Toast notifications
-[ ] Icons 
-[X] Broadcast a message to connected users when someone connects or disconnects.
-[X] Create a centralized list of IDs/sockets so when connecting/disconnecting we keep the same name
-[ ] https://riptutorial.com/socket-io/example/30273/example-server-side-code-for-handling-users
-[ ] Broadcast a message to connected users with the name of the user connecting or disconnecting (perhaps color icon in list)
-[ ] Add support for nicknames.
-[ ] Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she presses enter.
-[ ] Add “{user} is typing” functionality.
-[ ] Show who’s online.  List with status icons?
-[ ] Add private messaging - user specific messaging.
-[ ] History and reload on refresh
-*/ 
+/* LOAD OTHER MODULES */
 
 /* src: https://www.npmjs.com/package/uuid  */
 const { v4: uuidv4 } = require('uuid');
 
-// uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+
+
+/*
+    [X] Host + Github deployment
+    [ ] Staging + Production hosting
+    [-] Bootstrap
+    [X] Toast notifications
+    [ ] Icons 
+    [X] Broadcast a message to connected users when someone connects or disconnects.
+    [X] Create a centralized list of IDs/sockets so when connecting/disconnecting we keep the same name
+    [ ] https://riptutorial.com/socket-io/example/30273/example-server-side-code-for-handling-users
+    [ ] Broadcast a message to connected users with the name of the user connecting or disconnecting (perhaps color icon in list)
+    [ ] Add support for nicknames.
+    [ ] Don’t send the same message to the user that sent it. Instead, append the message directly as soon as he/she presses enter.
+    [ ] Add “{user} is typing” functionality.
+    [ ] Show who’s online.  List with status icons?
+    [ ] Add private messaging - user specific messaging.
+    [ ] History and reload on refresh
+*/ 
+
+
+/* DECLARE GLOBAL VARS */
 
 const users = {};
 
-function logNewUser(userObj){
-    console.log("LOGGING NEW USER!");
-    const user = {};
-    user.user_id = userObj.user_id;
-    user.user_name = userObj.user_name;
-    user.socket_id = userObj.socket_id;
-    user.first_connected_at = new Date().toISOString();
-    user.last_connected_at = new Date().toISOString();
-    users[user.user_id] = user;
-    return users[user.user_id];
-}
-
 const sockets = io.fetchSockets();
+
+/* Source: https://socket.io/docs/v3/troubleshooting-connection-issues/ */
+// const socket = require("socket.io-client")("https://example.com");
+
+io.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+});
 
 io.on('connection', (socket) => {
     const connection_msg = "Connection detected on socket: " + socket.id;
@@ -175,19 +173,19 @@ io.on('connection', (socket) => {
 var routes = require('./routes');
 app.use('/', routes);
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 // server.listen(3001, () => {
 //     console.log('Server ready - listening on *:3001');
 // });
 
-const myPort = process.env.PORT || 3000;
-server.listen(myPort, function (){
-  console.log("Calling app.listen's callback function...");
-  const host = server.address().address;
-  const port = server.address().port;
-  console.log('> Server ready - listening at Host: [', host,'] and Port:[', port,']');
-});
+// const myPort = process.env.PORT || 3000;
+// server.listen(myPort, function (){
+//   console.log("Calling app.listen's callback function...");
+//   const host = server.address().address;
+//   const port = server.address().port;
+//   console.log('> Server ready - listening at Host: [', host,'] and Port:[', port,']');
+// });
 
 
 
@@ -240,6 +238,18 @@ function lastUpdatedDate (file) {
 // const bootstrap = require('bootstrap');
 
 /* Helper Functions */
+
+function logNewUser(userObj){
+    console.log("LOGGING NEW USER!");
+    const user = {};
+    user.user_id = userObj.user_id;
+    user.user_name = userObj.user_name;
+    user.socket_id = userObj.socket_id;
+    user.first_connected_at = new Date().toISOString();
+    user.last_connected_at = new Date().toISOString();
+    users[user.user_id] = user;
+    return users[user.user_id];
+}
 
 function getUUID() {
 
@@ -330,3 +340,6 @@ function getUsersArray(users) {
     console.log("---------------------------------------");
 
 }
+
+
+console.log("OK! app.js COMPLETED - Waiting for clients...");
