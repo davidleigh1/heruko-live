@@ -5,7 +5,7 @@ window.chat.user_id = window.chat.user_id || getUUID();
 // var socket = io();
 // const socket = io("https://tlv.works/live");
 var socket = io.connect('https://tlv.works', {
-    path: "/live/socket.io"
+    path: "/live/socket.io/"
 });
 
 var messages = document.getElementById('messages');

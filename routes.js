@@ -8,9 +8,11 @@ const rootCtrl = require('./rootController');
 
 const router = express.Router();
 
-router.route('/live').get(rootCtrl.getHome);
+router.route('/').get(rootCtrl.getHome);
 router.route('/about').get(rootCtrl.getAbout);
+
 router.route('/chat').get(rootCtrl.getChat);
+router.route('/socket.io').get(rootCtrl.getSocket);
 
 router.route('/games').get(gameCtrl.getGames);
 router.route('/games/list').get(gameCtrl.getGames);
