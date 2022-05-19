@@ -1,12 +1,12 @@
 {
-  "name": "live",
+  "name": "heroku-live",
   "version": "1.0.0",
   "description": "Realtime webhooks functions",
   "main": "app.js",
   "dependencies": {
     "bootstrap": "^5.2.0-beta1",
     "express": "^4.18.1",
-    "socket.io": "^4.5.0",
+    "socket.io": "^4.5.1",
     "uuid": "^8.3.2"
   },
   "scripts": {
@@ -16,13 +16,13 @@
   "author": "DSL",
   "license": "ISC",
   "devDependencies": {
-       "dotenv": "^8.2.0",
-       "nodemon": "^2.0.4"
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4"
   },
   "nodemonConfig": {
-       "verbose": true,
-       "ignore": [
-            "locales/"
-       ]
+    "verbose": true,
+    "ignore": [
+      "locales/"
+    ]
   }
 }

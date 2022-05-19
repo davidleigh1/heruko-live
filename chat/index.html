@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./chat/img/chat-bubble.ico">
 
     <title>Websocket Real-time Chat | {tlv.works}</title>
 
-    <link rel="stylesheet" href="./css/bootstrap.css">
-    <link rel="stylesheet" href="./css/toastr.min.css">
-    <link rel="stylesheet" href="./css/chat-style.css">
+    <link rel="stylesheet" href="./chat/css/bootstrap.css">
+    <link rel="stylesheet" href="./chat/css/toastr.min.css">
+    <link rel="stylesheet" href="./chat/css/chat-style.css">
 
     </head>
     <body>
@@ -27,13 +28,13 @@
             <!-- Added role="note" (could also have used type="search" to prevent LastPass autofilling/activating) -->
             <input id="input" autocomplete="off" data-lpignore="true" role="note"/><button>Send</button>
         </form>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="https://tlv.works/live/socket.io/socket.io.js"></script>
-        <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
-        <script src="./js/jquery-3.6.0.min.js"></script>
-        <script src="./js/bootstrap.min.js"></script>
-        <script src="./js/toastr.min.js"></script>
-        <script src="./js/chat-scripts.js"></script>
+        <script src="./socket.io/socket.io.js"></script>
+        <!-- <script src="//tlv.works/live/socket.io/socket.io.js"></script> -->
+        <!-- <script src="//cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script> -->
+        <script src="./chat/js/jquery-3.6.0.min.js"></script>
+        <script src="./chat/js/bootstrap.min.js"></script>
+        <script src="./chat/js/toastr.min.js"></script>
+        <script src="./chat/js/chat-scripts.js"></script>
 
     </body>
 </html>
