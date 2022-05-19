@@ -22,9 +22,28 @@ form.addEventListener("submit", function (e) {
         msg_obj.happened_at = new Date().toISOString();
         msg_obj.is_history = false;
 
-        console.log(">>>","chat_message", msg_obj);
+        console.log("SEND >>>","chat_message", msg_obj);
 
-        socket.emit("chat_message", msg_obj );
+        /* Adding acknowledgements with timeout */
+        // socket.timeout(5000).emit("hello", "world", (err, response) => {
+        //     if (err) {
+        //       // the other side did not acknowledge the event in the given delay
+        //     } else {
+        //       console.log(response); // "got it"
+        //     }
+        //   });
+
+
+        socket.timeout(3000).emit("chat_message", msg_obj, (err, response) => {
+            if (err) {
+                // the other side did not acknowledge the event in the given delay
+                console.error("Server did not respond within 3 seconds",err);
+                notify("The server did not respond. <strong>Please check your connection!</strong>","error");
+                console.log(msg_obj.msg_id);
+              } else {
+                console.log("ACK <<<", response);
+              }
+        });
         // console.log(">>>","chat_message", input.value, getStoredSettings("user_id"));
         // socket.emit("chat_message", input.value, getStoredSettings("user_id") );
         input.value = "";
@@ -33,7 +52,9 @@ form.addEventListener("submit", function (e) {
 
 socket.on("connect", () => {
     console.log("LOCAL - We've just (re)connected!",socket);
+    notify("Successfully (re)connected!","success")
     console.log("LOCAL - Checking that we have a UUID:", getStoredSettings("user_id") );
+    
     if ( !getStoredSettings("user_id") ){
         // TODO: Replace with UUID
         updateStoredSettings("user_id", getUUID());
@@ -71,6 +92,11 @@ socket.on('chat_message', function(msg_obj) {
     var item = document.createElement('li');
     item.innerHTML = ("<span id='"+msg_obj.msg_id+"' class='message-line' title='"+ JSON.stringify(msg_obj) +"'><span class='message-sender'>" + msg_obj.sender_name + "</span><span class='message-content'>" + msg_obj.content + "</span></span><span class='message-timestamp'>"+msg_obj.happened_at+"</span>");
     item.classList.add("chat");
+    if (msg_obj.sender_id == 'system'){
+        item.classList.add("system");
+    } else {
+        item.classList.add("sender-"+msg_obj.sender_id);
+    }
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
 });

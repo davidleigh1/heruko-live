@@ -50,6 +50,8 @@ function logNewUser(userObj){
     return users[user.user_id];
 }
 
+const sockets = io.fetchSockets();
+
 io.on('connection', (socket) => {
     const connection_msg = "Connection detected on socket: " + socket.id;
     console.log(connection_msg);
@@ -60,11 +62,13 @@ io.on('connection', (socket) => {
     io.emit("notify", {'type':'notify', 'level': 'info', 'dest':'all', 'content': connection_msg, 'happened_at': socket.handshake.issued, 'query': socket.handshake.query} );
     
     console.log("Current users",users,"Total users:",Object.keys(users).length, "\n\n");
+    getUsersArray(users);
 
     socket.on('disconnect', () => {
+        console.log("Disconnection detected on socket:",socket.id);
 
         // TODO: What if returns 0 or >1 ?
-        const disconnectedUserObj = findUsers("socket_id", socket.id)[0];
+        const disconnectedUserObj = findUsers("socket_id", socket.id)[0] || {};
 
         const disconnection_msg = "User '"+disconnectedUserObj.user_name+"' disconnected";
 
@@ -79,11 +83,14 @@ io.on('connection', (socket) => {
     socket.on('client_connection', (settingsObj) => {
         console.log('\n\n==> client_connection:\n', settingsObj);
 
+        console.log("Assiging username: '",settingsObj.user_name,"' to socket.data.username for socket:", socket.id);
+        socket.data.username = settingsObj.user_name;
+
         // logConnection(settingsObj);
 
         /* Confirm if we recognize this user */
         if ( !users[settingsObj.user_id] ){
-            console.log("User not found!",settingsObj.user_id);
+            console.log("User not found in users{} with UUID:",settingsObj.user_id);
             const newUser = logNewUser(settingsObj);
 
             /* Prepare chat_message */
@@ -117,13 +124,21 @@ io.on('connection', (socket) => {
 
         }
         console.log("\n-------------\nUsers",users,"Total users:",Object.keys(users).length,"\n-------------\n");
+        getUsersArray(users);
 
     });
 
-    socket.on('chat_message', (msg_obj) => {
-        console.log("New Incoming Message:", msg_obj);
+        // socket.on("hello", (arg, callback) => {
+        //     console.log(arg); // "world"
+        //     callback("got it");
+        //   });
+
+    socket.on("chat_message", (msg_obj, callback) => {
+        console.log("New Incoming Message from '" + socket.data.username + "':", msg_obj);
+        callback("Server says 'got it' msg_id:"+msg_obj.msg_id);
         // console.log("New Incoming Message from '"+msg_obj.sender_name+"': " + msg_obj.content);
         io.emit('chat_message', msg_obj);
+        // TODO: Add green tick on confirmed receipt from all users 
     });
 });
 
@@ -223,4 +238,44 @@ function findUsers(matchKey, matchValue) {
     }
     console.log("Found " + matchingUsers.length + " users:", matchingUsers);
     return matchingUsers;
+}
+
+function getUserRooms(userId) {
+    
+}
+
+function getUsersArray(users) {
+    const count = io.engine.clientsCount;
+    // may or may not be similar to the count of Socket instances in the main namespace, depending on your usage
+    const count2 = io.of("/").sockets.size;
+
+    // const socketsArray = io.fetchSockets();
+    // const socketsArray = io.of("/").sockets;
+
+    console.log("---- getUsersArray() ------------------");
+    console.log("Users Array:", Object.keys(users).length);
+    console.log("io.engine.clientsCount:", count);
+    console.log("socket instances in namespace:", count2);
+    console.log("Sockets:",sockets.length,Object.keys(sockets).length)
+
+    console.log("io.sockets.adapter.rooms:\n",io.sockets.adapter.rooms);
+    // console.log(io.socket.rooms);
+    // console.log(socket.rooms);
+
+    // console.log("From io.fetchSockets() count:", Object.keys(socketsArray).length );
+    // for (const socket of socketsArray) {
+    //     console.log("---------");
+    //     console.log(socket.id);
+    //     console.log(socket.handshake);
+    //     console.log(socket.rooms);
+    //     console.log(socket.data);
+    //     console.log("---------");
+    //     // socket.emit(/* ... */);
+    //     // socket.join(/* ... */);
+    //     // socket.leave(/* ... */);
+    //     // socket.disconnect(/* ... */);
+    // }
+
+    console.log("---------------------------------------");
+
 }
