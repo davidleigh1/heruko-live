@@ -12,6 +12,13 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 // const io = new Server(server);
 
+/* Source: https://socket.io/docs/v3/troubleshooting-connection-issues/ */
+// const socket = require("socket.io-client")("https://example.com");
+
+// socket.on("connect_error", (err) => {
+//   console.log(`connect_error due to ${err.message}`);
+// });
+
 
 /* Source: https://socket.io/docs/v4/server-options/ */
 /* Source: https://stackoverflow.com/questions/25896225/how-do-i-get-socket-io-running-for-a-subdirectory */
@@ -23,6 +30,8 @@ const custompath = "https://tlv.works/live/chat/socket.io/";
 const io = new Server(server, {
   path: custompath
 });
+
+io.set('origins', '*:*');
 
 console.log("SOCKET.IO custom path: ", custompath);
 
