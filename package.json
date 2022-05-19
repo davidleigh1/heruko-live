@@ -11,8 +11,7 @@
   },
   "scripts": {
     "watch": "nodemon ./app.js",
-    "devStart": "nodemon app.js",
-    "nodeStart": "node app.js"
+    "devStart": "nodemon app.js"
   },
   "author": "DSL",
   "license": "ISC",
