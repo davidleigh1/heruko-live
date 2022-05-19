@@ -100,9 +100,14 @@ io.on('connection', (socket) => {
             msg_obj.sender_name = 'System';
             msg_obj.dest_id = null;
             msg_obj.msg_type = 'chat_message';
-            msg_obj.content = newUser.user_name + " has joined! ("+newUser.socket_id+")";
+            msg_obj.content = "<span class=\"joined inline-username\">" + newUser.user_name + "</span> has joined! ("+newUser.socket_id+")";
             msg_obj.happened_at = new Date().toISOString();
             msg_obj.is_history = false;
+
+            /* Add list of users in this chat */
+            const arrayOfUsernames = findUsers("user_name",null,"user_name").sort();
+            msg_obj.content += "<br>Now in chat ("+arrayOfUsernames.length+"): <span class=\"inline-username\">" + arrayOfUsernames.join("</span>, <span class=\"inline-username\">") + "</span>";
+
 
             io.emit("chat_message", msg_obj);
 
@@ -124,7 +129,6 @@ io.on('connection', (socket) => {
 
         }
         console.log("\n-------------\nUsers",users,"Total users:",Object.keys(users).length,"\n-------------\n");
-        getUsersArray(users);
 
     });
 
@@ -214,7 +218,7 @@ function getUUID() {
     // );
 }
 
-function findUsers(matchKey, matchValue) {
+function findUsers(matchKey, matchValue, returnKey) {
     matchingUsers = [];
     // matchKey = "socket_id";
     // matchValue = "o1vmmbCbbxEK1q-7AAAS";
@@ -222,19 +226,34 @@ function findUsers(matchKey, matchValue) {
     for (let userKey in users) {
     // console.log(`users.${prop} = ${users[prop]}`);
     
-    for (let [key, value] of Object.entries(users[userKey])) {
+        for (let [key, value] of Object.entries(users[userKey])) {
         // console.log(userKey, "---->", key, ":" , value);
         
-        if (key == matchKey){
+            if (key == matchKey){
                 console.log(userKey, "---->", key, ":" , value);
-                if (key == matchKey && value == matchValue){
+                if (key == matchKey && value.toLowerCase() == matchValue){
+                    // Exact non-case-specific match
+                    // If matchvalue = "", we will match users without a value
                     console.log("Match!");
                     matchingUsers.push(users[userKey]);
+                }
+                if (key == matchKey && matchValue == undefined){
+                    // console.log("return all with this key existing");
+                    // matchingUsers.push(users[userKey]);
+                    returnOnlyRequestedElem(users[userKey])
                 }
             }
         }
         
         // console.log(users[prop]);
+    }
+
+    function returnOnlyRequestedElem(userObjectToReturn){
+        if (!returnKey){
+            matchingUsers.push(userObjectToReturn);
+        } else {
+            matchingUsers.push(userObjectToReturn[returnKey]);
+        }
     }
     console.log("Found " + matchingUsers.length + " users:", matchingUsers);
     return matchingUsers;

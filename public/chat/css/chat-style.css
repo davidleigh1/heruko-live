@@ -67,16 +67,16 @@ body {
     font-size: smaller;
 }
 
-.message-sender {
+#messages .message-sender {
     font-weight: bold;
     display: block;
 }
 
-.message-content {
+#messages > :not(.system) .message-content {
     font-style: italic;
 }
 
-.message-timestamp {
+#messages .message-timestamp {
     font-size: x-small;
     font-variant: small-caps;
     display: block;
@@ -108,6 +108,14 @@ body {
     overflow: hidden;
 }
 
+.inline-username {
+    font-family: monospace;
+}
+
+.joined {
+    font-weight: bold;
+}
+
 .overflow-ellipsis {
     text-overflow: ellipsis;
 }
@@ -115,6 +123,6 @@ body {
 /* NOTIFICATONS */
 
 .toast-bottom-right {
-    bottom: 10%;
+    bottom: 15%;
     right: 1%;
 }
