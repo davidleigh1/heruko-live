@@ -10,7 +10,19 @@ const http = require('http');
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
-const io = new Server(server);
+// const io = new Server(server);
+
+
+/* Source: https://socket.io/docs/v4/server-options/ */
+/* Source: https://stackoverflow.com/questions/25896225/how-do-i-get-socket-io-running-for-a-subdirectory */
+// import { createServer } from "http";
+// import { Server } from "socket.io";
+
+// const server = createServer();
+const io = new Server(server, {
+  path: "/live/socket.io"
+});
+
 
 
 /*
