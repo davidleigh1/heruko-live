@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/tlvwhzhv/public_html/live/games
+    - export DEPLOYPATH=/home/tlvwhzhv/live
     # - /bin/cp app.js $DEPLOYPATH
     # - /bin/cp style.css $DEPLOYPATH
     # - /bin/cp -R chat $DEPLOYPATH
