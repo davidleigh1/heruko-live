@@ -20,7 +20,7 @@ const { Server } = require("socket.io");
 
 // const server = createServer();
 const io = new Server(server, {
-  path: "/live/socket.io/"
+  path: "https://tlv.works/live/socket.io/"
 });
 
 console.log("SOCKET.IO custom path: ","/live/socket.io/");
