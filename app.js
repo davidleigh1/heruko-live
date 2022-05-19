@@ -19,11 +19,12 @@ const { Server } = require("socket.io");
 // import { Server } from "socket.io";
 
 // const server = createServer();
+const custompath = "https://tlv.works/live/chat/socket.io/";
 const io = new Server(server, {
-  path: "https://tlv.works/live/socket.io/"
+  path: custompath
 });
 
-console.log("SOCKET.IO custom path: ","/live/socket.io/");
+console.log("SOCKET.IO custom path: ", custompath);
 
 
 /*
