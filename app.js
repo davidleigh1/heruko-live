@@ -158,7 +158,7 @@ app.use(express.static('public'));
 //     console.log('Server ready - listening on *:3001');
 // });
 
-const myPort = process.env.PORT || 3002;
+const myPort = process.env.PORT || 3001;
 server.listen(myPort, function (){
   console.log("Calling app.listen's callback function...");
   const host = server.address().address;
