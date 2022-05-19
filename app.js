@@ -20,10 +20,10 @@ const { Server } = require("socket.io");
 
 // const server = createServer();
 const io = new Server(server, {
-  path: "/live/socket.io"
+  path: "/live/socket.io/"
 });
 
-console.log("SOCKET.IO custom path: ","/live/socket.io");
+console.log("SOCKET.IO custom path: ","/live/socket.io/");
 
 
 /*
@@ -163,7 +163,7 @@ io.on('connection', (socket) => {
 /* ROUTER PAGES */
 
 var routes = require('./routes');
-app.use('/live', routes);
+app.use('/', routes);
 
 app.use(express.static('public'));
 
