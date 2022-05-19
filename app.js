@@ -23,6 +23,7 @@ const io = new Server(server, {
   path: "/live/socket.io"
 });
 
+console.log("SOCKET.IO custom path: ","/live/socket.io");
 
 
 /*
