@@ -123,6 +123,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     document.getElementById("username").innerHTML = "#" + getStoredSettings("user_name");
 
+    /* Focus cursor on the input field */
+    const firstInput = document.getElementById('input');
+    // firstInput.setSelectionRange(0, firstInput.value.length);
+    firstInput.focus();
+
 });
 
 /* Toast Notifications */
