@@ -1,7 +1,7 @@
 window.chat = localStorage.getItem("chat") ? JSON.parse( localStorage.getItem("chat") ) : {};
 window.chat.user_id = window.chat.user_id || getUUID();
-// var socket = io();
-const socket = io("https://tlv.works/live");
+var socket = io();
+// const socket = io("https://tlv.works/live");
 
 var messages = document.getElementById('messages');
 var form = document.getElementById("form");
