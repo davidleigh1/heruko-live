@@ -150,7 +150,7 @@ io.on('connection', (socket) => {
 /* ROUTER PAGES */
 
 var routes = require('./routes');
-app.use('/', routes);
+app.use('/live', routes);
 
 app.use(express.static('public'));
 

@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.route('/live').get(rootCtrl.getHome);
 router.route('/about').get(rootCtrl.getAbout);
-router.route('/live/chat').get(rootCtrl.getChat);
+router.route('/chat').get(rootCtrl.getChat);
 
 router.route('/games').get(gameCtrl.getGames);
 router.route('/games/list').get(gameCtrl.getGames);
